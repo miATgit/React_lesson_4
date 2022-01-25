@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../App.css';
 import { Button, Container, TextField, Typography } from '@material-ui/core';
 
@@ -13,6 +13,8 @@ function Home() {
   let rand = Math.floor(Math.random() * max);
 
   const botAnswer = botSay[rand];
+
+  const textFieldAutoFocus = useRef();
 
   const onSendMessage = () => {
     const trimmed =  inputMessage.trim();
@@ -41,8 +43,8 @@ function Home() {
              }
              ]);
        }, 1500);
+       textFieldAutoFocus.current.focus();
        setInputMessage('');
-  
       
     }, [messageArray]);
   
@@ -65,16 +67,16 @@ function Home() {
       <Container className='MessageInput'>
         <div>Write your message here:</div>
         <div className='MessageInput_group'>
-        <TextField autoFocus  className='inputBlock' variant="outlined"  id="standard-multiline-flexible"
+        <input ref={textFieldAutoFocus} autoFocus className='inputBlock' variant="outlined"  id="standard-multiline-flexible"
           label="Multiline"
           multiline
           maxRows={2}
          value = {inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
+          onChange={(e) => setInputMessage(e.target.value) }
           onKeyDown={({key}) => {
             if (key === 'Enter' || key.code === 13){
             onSendMessage()}
-          }}></TextField>
+          }}></input>
         <Button variant="contained"
         color="primary" onClick={onSendMessage}>Send</Button>
         </div>
